@@ -9,7 +9,7 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
 	<http:request-config name="HTTP_Request_Exp" doc:name="HTTP Request configuration" doc:id="9e4d63b9-ba9f-46c8-998d-90356684cd06">
 		<http:request-connection host="${request.host}" port="${request.port}" protocol="${request.protocol}" connectionIdleTimeout="300000">
 			<tls:context >
-				<tls:trust-store path="${truststore.client.path}" password="${truststore.client.keypassword}" type="${truststore.client.type}" />
+				<tls:trust-store path="${truststore.client.path}" password="${truststore.client.keypassword}" type="${truststore.client.type}" insecure="true"/>
 				<tls:key-store type="${keystore.client.type}" path="${keystore.client.path}" alias="${keystore.client.alias}" keyPassword="${keystore.client.keypassword}" password="${keystore.client.password}" />
 			</tls:context>
 		</http:request-connection>
