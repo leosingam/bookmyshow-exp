@@ -1,0 +1,33 @@
+#%RAML 1.0 Library
+ 
+traits:
+  errorResp: !include ../Traits/errorResponsesTrait.raml
+  client-ID-Secret: !include ../Traits/headerTrait.raml
+
+securitySchemes:
+  customSecurity: !include ../SecuritySchemes/customSecurityScheme.raml
+  
+resourceTypes:
+  movieCollection:
+    is: [errorResp, client-ID-Secret]
+    securedBy:
+      - customSecurity    
+    get?:
+      description: This is used to fetch <<resourcePathName>>
+      responses:
+        200:
+          body:
+            application/json:
+              type: <<getBodyType>> 
+              example: <<getResponse>>
+    post?:
+      description: This is used create <<resourcePathName>>
+      body:
+        application/json:
+          type: <<postBodyType>>  
+          example: <<postBody>>
+      responses:
+        201:
+          body:
+            application/json:
+              example: <<postResponse>>

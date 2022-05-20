@@ -1,0 +1,4 @@
+%dw 2.0
+
+type auto_3617806b_dc1c_4cb6_a9f7_789372d8ca7e_Input_Payload = Array<{|  MovieID: Number,   MovieName: String,   Language: String,   TheatreName: String,   TheatreID: String,   TotalTickets: Number,   UnBooked: Number|}>
+

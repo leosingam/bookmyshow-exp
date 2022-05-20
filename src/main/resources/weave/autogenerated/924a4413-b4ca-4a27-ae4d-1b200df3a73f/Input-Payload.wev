@@ -1,0 +1,15 @@
+%dw 2.0
+
+type auto_924a4413_b4ca_4a27_ae4d_1b200df3a73f_Input_Payload = {
+  TheatreID: String, 
+  MovieID: Number, 
+  BookedTickets: Number, 
+  MovieName: String, 
+  TheatreName: String, 
+  Language: String, 
+  Username: String, 
+  TotalTickets: Number, 
+  BookingStatus: Number, 
+  _?: Any
+}
+

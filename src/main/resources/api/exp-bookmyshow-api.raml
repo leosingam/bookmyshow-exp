@@ -1,0 +1,65 @@
+#%RAML 1.0
+title: Exp BookMyShow API
+
+description: This is experience API to book and display the tickets for the movies
+
+protocols: 
+  - HTTPS
+
+mediaType: 
+  - application/json
+  - application/xml
+version: 1.0.0
+
+uses:
+  movieResource: /ResourceTypes/TicketbookingResourceType.raml
+
+types:
+  ticketBooking: !include /DataTypes/MovieTicketsDataType.raml
+  Booked: !include /DataTypes/BookedTicketsDataType.raml
+
+/movieslist:
+  type:
+    movieResource.movieCollection:
+      getResponse: !include /Examples/Movieexample.json
+      getBodyType: ticketBooking[]
+  get:
+    queryParameters:
+      movieName:
+        type: string
+        required: false
+/BookTickets:
+  type:
+    movieResource.movieCollection:
+      postBody: !include /Examples/TicketBooking.json
+      postResponse: !include /Examples/TicketBookingResponse.json
+      postBodyType: !include /DataTypes/PostTicketsDataType.raml
+  post:
+    
+/TicketBooked:
+  type:
+    movieResource.movieCollection:
+      getResponse: !include /Examples/BookedTicketsResponse.json
+      getBodyType: Booked[]
+  get:
+    queryParameters:
+      username:
+        type: string
+        required: true
+
+/eTickets:
+  type:
+    movieResource.movieCollection:
+      getResponse: !include /Examples/BookedTicketsResponse.json
+      getBodyType: Booked[]
+  get:
+    queryParameters:
+      username:
+        type: string
+        required: true
+      orderID:
+        type: string
+        required: true
+    
+    
+  

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd">
+	<http:request-config name="HTTP_Request_Exp" doc:name="HTTP Request configuration" doc:id="9e4d63b9-ba9f-46c8-998d-90356684cd06">
+		<http:request-connection host="${request.host}" port="${request.port}" protocol="${request.protocol}" connectionIdleTimeout="300000">
+			<tls:context >
+				<tls:trust-store path="${truststore.client.path}" password="${truststore.client.keypassword}" type="${truststore.client.type}" />
+				<tls:key-store type="${keystore.client.type}" path="${keystore.client.path}" alias="${keystore.client.alias}" keyPassword="${keystore.client.keypassword}" password="${keystore.client.password}" />
+			</tls:context>
+		</http:request-connection>
+	</http:request-config>
+	<http:listener-config name="HTTP_Listener_Exp" doc:name="HTTP Listener config" doc:id="6663be80-aef0-44aa-b3d5-ed5634f24615" >
+		<http:listener-connection host="${https.host}" port="${https.port}" protocol="HTTPS">
+			<tls:context >
+				<tls:key-store type="${keystore.server.type}" path="${keystore.server.path}" alias="${keystore.server.alias}" keyPassword="${keystore.server.keypassword}" password="${keystore.server.password}" />
+			</tls:context>
+		</http:listener-connection>
+	</http:listener-config>
+	<configuration-properties doc:name="Configuration properties" doc:id="7ec74a16-561a-4709-a4e8-1706fd77cac7" file="config.yaml" />
+</mule>

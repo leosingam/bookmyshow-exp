@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="Implementation-test-suite.xml" />
+	<munit:test name="Implementation-test-suite-moviesListFlowTest" doc:id="2fdaf34e-6a0c-40a6-b2c1-e69916d30b9e" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="db19c53e-03b3-4f9d-b6da-71cc2a0a3aec" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="moviesRequest" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="fe84e80f-71eb-49eb-9063-87fe7e39ec80" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="d3201960-3569-4eff-a519-ed6755cf8bad" >
+				<munit:payload value='{
+    "TheatreID": "BIG",
+    "UnBooked": 0,
+    "MovieID": 5,
+    "MovieName": "RRR",
+    "TheatreName": "BIG SCREENS",
+    "Language": "HINDI",
+    "TotalTickets": 100
+  }' />
+				<munit:attributes value="#[attributes:queryparams:{movieName:'RRR'}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to moviesListFlow" doc:id="2a0d7a4d-26b9-4d0c-b7da-4b1f864a2593" name="moviesListFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="84c81352-d4a6-4761-937e-2a464d3a89c7" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="Implementation-test-suite-bookTicketsFlowTest" doc:id="e7651278-6040-40d2-86ae-4869814424fa" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="b43f259c-f36d-483e-bdf4-0c3ad346d0d8" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="bookingRequest" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="b7280a13-2e97-408c-b412-cb895efe71ae" attributeName="doc:id" />
+					<munit-tools:with-attribute whereValue="/api/pBookTickets" attributeName="path" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="f8f4dce6-3e74-49f9-9c15-28ff8c9af4b5" >
+				<munit:payload value='{&#10;  "message": "Ticket Booked successfully"&#10;}' />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to bookTicketsFlow" doc:id="ec2f0e13-3e6e-4ee4-ab4d-e474eea41b45" name="bookTicketsFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="f8d91123-22fd-49f2-9dc5-d73d2867e84a" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="Implementation-test-suite-ticketsBookedFlowTest" doc:id="dac8503f-0221-40de-ada3-509c0743c4eb" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="cd4289ab-c188-4e48-96e4-400a412d86c5" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="getBookedRequest" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="e3268434-7323-4e24-8552-5ca82ea02403" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="1231c168-c784-443d-892d-02aac970d084" >
+				<munit:payload value=' {&#10;    "BookingID": 6,&#10;    "MovieID": 1,&#10;    "MovieName": "MASTER",&#10;    "Language": "BIG SCREENS",&#10;    "TheatreName": "BIG SCREENS",&#10;    "TheatreID": "BIG",&#10;    "TotalTickets": 1,&#10;    "BookedTickets": 11,&#10;    "Username": "",&#10;    "BookingStatus": "1"&#10;  }' />
+				<munit:attributes value="#[attributes:queryparams:{username:'Ravikumar', orderID:1}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to ticketsBookedFlow" doc:id="6effa86d-8dd9-4b9a-af05-e109f1bf43ca" name="ticketsBookedFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="6ebf059d-7aae-4137-96d2-a8a9f6ac6870" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="Implementation-test-suite-eTicketsFlowTest" doc:id="d3ee185c-4a0e-4338-b364-932310b539a2" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="da1c0e21-0f5e-4f0a-bf93-698482b2b16d" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Request" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="96a95786-1f53-43b4-a104-0d9c971ff7f7" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="f237e86e-3c58-4831-a275-30e23a135e33" >
+				<munit:payload value='{&#10;    "BookingID": 6,&#10;    "MovieID": 1,&#10;    "MovieName": "MASTER",&#10;    "Language": "BIG SCREENS",&#10;    "TheatreName": "BIG SCREENS",&#10;    "TheatreID": "BIG",&#10;    "TotalTickets": 1,&#10;    "BookedTickets": 11,&#10;    "Username": "",&#10;    "BookingStatus": "1"&#10;  }' />
+				<munit:attributes value="#[attributes:queryparams:{username:'Ravikumar'}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to eTicketsFlow" doc:id="7146e629-8b03-488e-88d7-682ffd15da30" name="eTicketsFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="8fe8f358-3a59-4f45-b0d0-974746e1543a" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="Implementation-test-suite-moviesListFlowTest1" doc:id="483c4740-5f9e-4db9-bd19-32f0b23f458f" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="8ff56dfd-0bbd-49f0-bcc0-8d74517daa89" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="moviesRequest" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="fe84e80f-71eb-49eb-9063-87fe7e39ec80" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="HTTP:TIMEOUT" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="5e143280-eac9-4f0b-b22b-ced965092f01" >
+				<munit:payload value='{
+    "TheatreID": "BIG",
+    "UnBooked": 0,
+    "MovieID": 5,
+    "MovieName": "RRR",
+    "TheatreName": "BIG SCREENS",
+    "Language": "HINDI",
+    "TotalTickets": 100
+  }' />
+				<munit:attributes value="#[message:attributes:queryParams:{movieName:'RRR'}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to moviesListFlow" doc:id="7f5578e0-b723-4853-9ba6-7e56c45e8fd6" name="moviesListFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="646c6c32-ef33-4fb1-9707-da4a40981d96" actual="#[vars.httpStatus]" expected="400" />
+			<munit-tools:assert-that doc:name="Assert that" doc:id="6ba1e778-09c9-4251-add8-60f36937de30" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="Implementation-test-suite-bookTicketsFlowTest1" doc:id="a2989c8e-193e-404f-9ab4-826b3f1eecbe" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="5a2f8134-ca3d-4a6e-b4c4-a571a903f18a" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="bookingRequest" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="b7280a13-2e97-408c-b412-cb895efe71ae" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="HTTP:TIMEOUT" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="2bf2ef6f-e916-4e87-9641-4f48a084150a" />
+			<flow-ref doc:name="Flow-ref to moviesListFlow" doc:id="5492153d-c5cf-45fe-88d9-64f6ae79125c" name="bookTicketsFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="cc6a455e-0e42-441a-9e18-802fc6ebf6b4" actual="#[vars.httpStatus]" expected="400"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="Implementation-test-suite-ticketsBookedFlowTest1" doc:id="a37cdef8-e5bd-4c38-bda1-532e6f13ae74" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="92de04fa-7c7e-4911-b822-f41ea9fa4a3c" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="getBookedRequest" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="e3268434-7323-4e24-8552-5ca82ea02403" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="HTTP:TIMEOUT" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="95676e78-4da8-479b-8462-abb8deae7705" />
+			<flow-ref doc:name="Flow-ref to ticketsBookedFlow" doc:id="f4f245d5-2d8c-4e32-8c97-c601ea32c971" name="ticketsBookedFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="f183a28a-fead-4fdc-bf6c-35d791122c62" actual="#[vars.httpStatus]" expected="400"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="Implementation-test-suite-eTicketsFlowTest1" doc:id="af4364d9-dc89-404a-a63a-49fd4a3e2379" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="b26d84c9-44cb-4984-9b8f-d871f315381d" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Request" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="96a95786-1f53-43b4-a104-0d9c971ff7f7" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="HTTP:TIMEOUT" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="aac36dbb-edb0-4f94-b879-36be5e8d6b85" />
+			<flow-ref doc:name="Flow-ref to eTicketsFlow" doc:id="b25e6de1-bbdb-42a9-ba9c-4035ea8794a4" name="eTicketsFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="9cfc5102-8717-4658-90b1-89739371d06d" actual="#[vars.httpStatus]" expected="400"/>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>

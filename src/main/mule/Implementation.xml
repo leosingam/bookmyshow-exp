@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="moviesListFlow" doc:id="3617806b-dc1c-4cb6-a9f7-789372d8ca7e" >
+		<http:request method="GET" doc:name="moviesRequest" doc:id="fe84e80f-71eb-49eb-9063-87fe7e39ec80" config-ref="HTTP_Request_Exp" path="/api/pmovieslist" responseTimeout="600000">
+			<http:headers ><![CDATA[#[output application/json
+---
+{
+	"client_id" : p('request.client_id'),
+	"client_secret" : p('request.client_secret'),
+	"Accept" : p('request.accept'),
+	"Content-Type" : p('request.contentType')
+}]]]></http:headers>
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"movie" : attributes.queryParams.movieName
+}]]]></http:query-params>
+		</http:request>
+		<logger level="INFO" doc:name="Logger" doc:id="e6ae7ad2-cb3b-409d-816b-b9bd070c03fb" />
+		<error-handler >
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="41c811b6-1976-4c6d-a216-d4efbf5d69a2" >
+				<ee:transform doc:name="Transform Message" doc:id="8c724004-baed-45fc-bf13-f556990d4b77" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+"message" : 'The ' ++ message.attributes.queryParams.movieName as String default "" ++ ' not available in BookMyShow'
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<set-variable value="400" doc:name="httpStatus" doc:id="1426682c-7610-4e59-a11b-5ccefbca9a91" variableName="httpStatus"/>
+			</on-error-continue>
+		</error-handler>
+	</flow>
+	<flow name="bookTicketsFlow" doc:id="924a4413-b4ca-4a27-ae4d-1b200df3a73f" >
+		<http:request method="POST" doc:name="bookingRequest" doc:id="b7280a13-2e97-408c-b412-cb895efe71ae" config-ref="HTTP_Request_Exp" path="/api/pBookTickets" responseTimeout="600000">
+			<http:headers ><![CDATA[#[output application/json
+---
+{
+	"client_id" : p('request.client_id'),
+	"client_secret" : p('request.client_secret'),
+	"Accept" : p('request.accept'),
+	"Content-Type" : p('request.contentType')
+}]]]></http:headers>
+		</http:request>
+		<logger level="INFO" doc:name="Logger" doc:id="e51c8c1f-5b1f-44c3-9571-d24833771818" />
+		<error-handler >
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="0e147138-67a3-4894-be68-4a0f8bd95456" >
+				<set-variable value="400" doc:name="httpStatus" doc:id="616072ae-8e5e-484e-9750-aab386a5fe83" variableName="httpStatus"/>
+			</on-error-continue>
+		</error-handler>
+	</flow>
+	<flow name="ticketsBookedFlow" doc:id="ed8aeef7-ee7a-426a-bfe3-f4996e094b3e" >
+		<http:request method="GET" doc:name="getBookedRequest" doc:id="e3268434-7323-4e24-8552-5ca82ea02403" config-ref="HTTP_Request_Exp" path="/api/pTicketBooked" responseTimeout="600000">
+			<http:headers ><![CDATA[#[output application/json
+---
+{
+	"client_id" : p('request.client_id'),
+	"client_secret" : p('request.client_secret'),
+	"Accept" : p('request.accept'),
+	"Content-Type" : p('request.contentType')
+}]]]></http:headers>
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"UserName" : attributes.queryParams.username
+}]]]></http:query-params>
+		</http:request>
+		<logger level="INFO" doc:name="Logger" doc:id="ea1e15e9-ec7e-438d-8de8-3e3d2736fa9d" />
+		<error-handler >
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="7cf548fa-f58e-453d-99c9-c3457d7e9386" >
+				<set-variable value="400" doc:name="httpStatus" doc:id="0b0619f6-975e-4118-9749-57b2db3ba894" variableName="httpStatus"/>
+			</on-error-continue>
+		</error-handler>
+	</flow>
+	<flow name="eTicketsFlow" doc:id="3fd16366-07b3-482b-944f-da1021be282e" >
+		<http:request method="GET" doc:name="Request" doc:id="96a95786-1f53-43b4-a104-0d9c971ff7f7" config-ref="HTTP_Request_Exp" path="/api/peTickets" responseTimeout="600000">
+			<http:headers ><![CDATA[#[output application/json
+---
+{
+	"client_id" : p('request.client_id'),
+	"client_secret" : p('request.client_secret'),
+	"Accept" : p('request.accept'),
+	"Content-Type" : p('request.contentType')
+}]]]></http:headers>
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"orderID" : attributes.queryParams.orderID,
+	"UserName" : attributes.queryParams.username
+}]]]></http:query-params>
+		</http:request>
+		<logger level="INFO" doc:name="Logger" doc:id="66ab7157-76d3-415c-b37b-4901e19f377a" />
+		<error-handler >
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="0cf7508d-3929-4de8-b3f8-d25ab052aed2" >
+				<set-variable value="400" doc:name="Set Variable" doc:id="603da15c-41a7-4609-b303-d6885e797e69" variableName="httpStatus"/>
+			</on-error-continue>
+		</error-handler>
+	</flow>
+</mule>
