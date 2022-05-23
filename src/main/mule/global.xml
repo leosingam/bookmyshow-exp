@@ -23,5 +23,4 @@ http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/m
 		</http:listener-connection>
 	</http:listener-config>
 	<configuration-properties doc:name="Configuration properties" doc:id="7ec74a16-561a-4709-a4e8-1706fd77cac7" file="config.yaml" />
-	<api-gateway:autodiscovery apiId="17850620" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="6e646ce1-3b13-479b-9daf-c28be7ad9679" flowRef="exp-bookmyshow-api-main" />
 </mule>
