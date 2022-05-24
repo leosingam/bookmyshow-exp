@@ -21,10 +21,10 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 	"movie" : attributes.queryParams.movieName
 }]]]></http:query-params>
 		</http:request>
-		<logger level="INFO" doc:name="Logger" doc:id="e6ae7ad2-cb3b-409d-816b-b9bd070c03fb" />
+		<logger level="INFO" doc:name="Logger" doc:id="e6ae7ad2-cb3b-409d-816b-b9bd070c03fb" message='#["End of experience API - Movie List"]'/>
 		<error-handler >
 			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="41c811b6-1976-4c6d-a216-d4efbf5d69a2" >
-				<ee:transform doc:name="Transform Message" doc:id="8c724004-baed-45fc-bf13-f556990d4b77" >
+				<ee:transform doc:name="movieErrorMessage" doc:id="8c724004-baed-45fc-bf13-f556990d4b77" >
 					<ee:message >
 						<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
@@ -49,7 +49,7 @@ output application/json
 	"Content-Type" : p('request.contentType')
 }]]]></http:headers>
 		</http:request>
-		<logger level="INFO" doc:name="Logger" doc:id="e51c8c1f-5b1f-44c3-9571-d24833771818" />
+		<logger level="INFO" doc:name="Logger" doc:id="e51c8c1f-5b1f-44c3-9571-d24833771818" message='#["End of experience API - Book Tickets"]'/>
 		<error-handler >
 			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="0e147138-67a3-4894-be68-4a0f8bd95456" >
 				<set-variable value="400" doc:name="httpStatus" doc:id="616072ae-8e5e-484e-9750-aab386a5fe83" variableName="httpStatus"/>
@@ -72,7 +72,7 @@ output application/json
 	"UserName" : attributes.queryParams.username
 }]]]></http:query-params>
 		</http:request>
-		<logger level="INFO" doc:name="Logger" doc:id="ea1e15e9-ec7e-438d-8de8-3e3d2736fa9d" />
+		<logger level="INFO" doc:name="Logger" doc:id="ea1e15e9-ec7e-438d-8de8-3e3d2736fa9d" message='#["End of experience API - User History"]'/>
 		<error-handler >
 			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="7cf548fa-f58e-453d-99c9-c3457d7e9386" >
 				<set-variable value="400" doc:name="httpStatus" doc:id="0b0619f6-975e-4118-9749-57b2db3ba894" variableName="httpStatus"/>
@@ -96,10 +96,10 @@ output application/json
 	"UserName" : attributes.queryParams.username
 }]]]></http:query-params>
 		</http:request>
-		<logger level="INFO" doc:name="Logger" doc:id="66ab7157-76d3-415c-b37b-4901e19f377a" />
+		<logger level="INFO" doc:name="Logger" doc:id="66ab7157-76d3-415c-b37b-4901e19f377a" message='#["End of experience API - return e Tickets"]'/>
 		<error-handler >
 			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="0cf7508d-3929-4de8-b3f8-d25ab052aed2" >
-				<set-variable value="400" doc:name="Set Variable" doc:id="603da15c-41a7-4609-b303-d6885e797e69" variableName="httpStatus"/>
+				<set-variable value="400" doc:name="httpStatus" doc:id="603da15c-41a7-4609-b303-d6885e797e69" variableName="httpStatus"/>
 			</on-error-continue>
 		</error-handler>
 	</flow>
